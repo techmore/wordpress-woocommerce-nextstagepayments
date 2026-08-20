@@ -1,0 +1,127 @@
+---
+- name: Install wp-cli
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: "{{ wp_bin }}"
+    mode: '0755'
+
+- name: Create writable home for www-data (wp-cli cache)
+  ansible.builtin.file:
+    path: /var/www
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Create WordPress root directory
+  ansible.builtin.file:
+    path: "{{ wp_root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Download WordPress core
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - core
+      - download
+      - "--path={{ wp_root }}"
+      - --force
+    creates: "{{ wp_root }}/wp-config.php"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+
+- name: Create wp-config.php
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - config
+      - create
+      - "--path={{ wp_root }}"
+      - "--dbname={{ wp_db_name }}"
+      - "--dbuser={{ wp_db_user }}"
+      - "--dbpass={{ wp_db_password }}"
+      - --dbhost=localhost
+      - --skip-check
+    creates: "{{ wp_root }}/wp-config.php"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+
+- name: Check if WordPress core is installed
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - core
+      - is-installed
+      - "--path={{ wp_root }}"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+  register: wp_core_installed
+  changed_when: false
+  failed_when: false
+
+- name: Install WordPress core
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - core
+      - install
+      - "--url={{ wp_site_url }}"
+      - "--title={{ wp_site_title }}"
+      - "--admin_user={{ wp_admin_user }}"
+      - "--admin_password={{ wp_admin_password }}"
+      - "--admin_email={{ wp_admin_email }}"
+      - --skip-email
+      - "--path={{ wp_root }}"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+  when: wp_core_installed.rc != 0
+
+- name: Install and activate WooCommerce
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - plugin
+      - install
+      - woocommerce
+      - --activate
+      - "--path={{ wp_root }}"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+  changed_when: false
+
+- name: Install and activate extra plugins
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - plugin
+      - install
+      - "{{ item }}"
+      - --activate
+      - "--path={{ wp_root }}"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+  changed_when: false
+  loop: "{{ wp_extra_plugins }}"
+
+- name: Install and activate theme
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - theme
+      - install
+      - "{{ wp_theme }}"
+      - --activate
+      - "--path={{ wp_root }}"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+  changed_when: false

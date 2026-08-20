@@ -1,0 +1,12 @@
+---
+# Copy this file to ansible/inventory/production.yml.
+# For DigitalOcean droplets created with root user:
+#   User data / SSH root access -> ansible_user: root
+# If you use the `ubuntu` user instead, set ansible_user: ubuntu and ansible_become: true.
+all:
+  children:
+    production:
+      hosts:
+        droplet1:
+          ansible_host: 143.198.1.2
+          ansible_user: root

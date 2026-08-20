@@ -1,0 +1,12 @@
+---
+- name: Provision WordPress + WooCommerce + NextStagePayments
+  hosts: all
+  become: true
+  roles:
+    - common
+    - php
+    - mariadb
+    - nginx
+    - wordpress
+    - compliance
+    - nextstage

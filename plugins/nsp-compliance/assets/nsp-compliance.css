@@ -1,0 +1,125 @@
+.nsp-disclaimer {
+	background: #1a1f71;
+	color: #ffffff;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: .02em;
+	padding: 8px 16px;
+	position: relative;
+	z-index: 9999;
+}
+
+#nsp-age-gate {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, .72);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 999999;
+}
+#nsp-age-gate[hidden] {
+	display: none;
+}
+.nsp-age-box {
+	background: #ffffff;
+	color: #111111;
+	max-width: 430px;
+	width: 92%;
+	margin: 16px;
+	padding: 32px 28px;
+	border-radius: 12px;
+	text-align: center;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+}
+.nsp-age-box h2 {
+	margin: 0 0 12px;
+	font-size: 24px;
+}
+.nsp-age-box p {
+	font-size: 15px;
+	line-height: 1.5;
+}
+.nsp-age-box small {
+	color: #666;
+}
+.nsp-age-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	justify-content: center;
+	margin: 18px 0 10px;
+}
+.nsp-age-actions button {
+	border: 0;
+	border-radius: 8px;
+	padding: 12px 22px;
+	font-size: 15px;
+	font-weight: 700;
+	cursor: pointer;
+}
+.nsp-age-yes {
+	background: #1a1f71;
+	color: #ffffff;
+}
+.nsp-age-yes:hover {
+	background: #11154f;
+}
+.nsp-age-no {
+	background: #e8e8e8;
+	color: #111111;
+}
+.nsp-age-no:hover {
+	background: #d4d4d4;
+}
+
+body.nsp-age-locked {
+	overflow: hidden;
+}
+
+.nsp-footer-legal {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 32px;
+	justify-content: space-between;
+	background: #1a1f71;
+	color: #ffffff;
+	padding: 28px 6%;
+	font-size: 12px;
+	line-height: 1.6;
+}
+.nsp-footer-legal a {
+	color: #ffffff;
+}
+.nsp-footer-col {
+	flex: 1 1 240px;
+	max-width: 480px;
+}
+.nsp-footer-col > p:first-child {
+	margin-top: 0;
+}
+.nsp-accept-title {
+	font-weight: 700;
+	font-size: 14px;
+	margin: 0 0 10px;
+	text-transform: uppercase;
+	letter-spacing: .05em;
+}
+.nsp-badge {
+	display: inline-block;
+	margin: 0 8px 8px 0;
+}
+.nsp-badge img {
+	display: block;
+	border-radius: 4px;
+	width: 48px;
+	height: auto;
+}
+.nsp-age-note {
+	font-weight: 700;
+	margin: 10px 0 0;
+}
+.nsp-footer-fda p {
+	margin: 0;
+}

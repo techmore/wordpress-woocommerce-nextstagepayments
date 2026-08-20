@@ -1,0 +1,18 @@
+---
+# Copy this file to ansible/inventory/group_vars/production.yml and fill in your values.
+# Tip: run `ansible-vault encrypt ansible/inventory/group_vars/production.yml` to protect secrets.
+
+wp_site_domain: shop.example.com
+wp_site_url: "https://shop.example.com"
+wp_site_title: "My NextStage Store"
+
+wp_admin_user: admin
+wp_admin_password: "SOME_STRONG_PASSWORD"
+wp_admin_email: you@example.com
+
+wp_db_name: wordpress
+wp_db_user: wordpress
+wp_db_password: "SOME_STRONG_DB_PASSWORD"
+
+enable_ssl: true
+configure_firewall: true

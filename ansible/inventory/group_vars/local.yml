@@ -1,0 +1,7 @@
+---
+# Local container machine - plain HTTP served on the machine's own IP
+# (container machines have an isolated network; macOS reaches them at that IP).
+wp_site_domain: "{{ ansible_host }}"
+wp_site_url: "http://{{ ansible_host }}"
+enable_ssl: false
+configure_firewall: false

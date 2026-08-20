@@ -1,0 +1,20 @@
+---
+- name: Install PHP-FPM and extensions
+  ansible.builtin.apt:
+    name: "{{ ['php-fpm'] + php_extensions }}"
+    state: present
+
+- name: Detect PHP-FPM service name
+  ansible.builtin.shell: ls -1d /etc/init.d/php*-fpm 2>/dev/null | head -1 | xargs -r basename
+  register: php_fpm_detect
+  changed_when: false
+
+- name: Set php_fpm_service fact
+  ansible.builtin.set_fact:
+    php_fpm_service: "{{ php_fpm_detect.stdout }}"
+
+- name: Ensure PHP-FPM is running
+  ansible.builtin.service:
+    name: "{{ php_fpm_service }}"
+    state: started
+    enabled: true

@@ -1,0 +1,22 @@
+---
+- name: Copy NextStagePayments plugin into WordPress
+  ansible.builtin.copy:
+    src: "{{ nsp_plugin_src }}"
+    dest: "{{ wp_root }}/wp-content/plugins/"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+    directory_mode: '0755'
+
+- name: Activate NextStagePayments plugin
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - plugin
+      - activate
+      - nextstagepayments
+      - "--path={{ wp_root }}"
+  become_user: www-data
+  environment:
+    HOME: /var/www
+  changed_when: false

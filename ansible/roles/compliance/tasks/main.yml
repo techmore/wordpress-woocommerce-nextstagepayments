@@ -1,0 +1,36 @@
+---
+- name: Copy NSP compliance plugin
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../../plugins/nsp-compliance"
+    dest: "{{ wp_root }}/wp-content/plugins/"
+    owner: www-data
+    group: www-data
+    mode: preserve
+  become: true
+
+- name: Activate NSP compliance plugin
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - plugin
+      - activate
+      - nsp-compliance
+      - "--path={{ wp_root }}"
+      - --allow-root
+  environment:
+    HOME: /var/www
+  become: true
+  changed_when: false
+
+- name: Create NSP compliance pages and footer menu
+  ansible.builtin.command:
+    argv:
+      - "{{ wp_bin }}"
+      - eval
+      - "NSP\\Compliance\\ensure_pages_and_menu();"
+      - "--path={{ wp_root }}"
+      - --allow-root
+  environment:
+    HOME: /var/www
+  become: true
+  changed_when: false

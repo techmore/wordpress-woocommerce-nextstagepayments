@@ -1,0 +1,49 @@
+---
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Ensure Nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Remove default Nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Write WordPress site config
+  ansible.builtin.template:
+    src: wordpress.conf.j2
+    dest: "/etc/nginx/sites-available/{{ wp_site_domain }}.conf"
+  notify: reload nginx
+
+- name: Enable WordPress site
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ wp_site_domain }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ wp_site_domain }}.conf"
+    state: link
+  notify: reload nginx
+
+- name: Obtain Let's Encrypt certificate
+  when: enable_ssl and wp_site_domain != 'localhost'
+  block:
+    - name: Install certbot
+      ansible.builtin.apt:
+        name:
+          - certbot
+          - python3-certbot-nginx
+        state: present
+
+    - name: Run certbot (issues cert + configures HTTPS redirect)
+      ansible.builtin.command: certbot --nginx -d {{ wp_site_domain }} --non-interactive --agree-tos -m {{ wp_admin_email }} --redirect
+      args:
+        creates: "/etc/letsencrypt/live/{{ wp_site_domain }}/fullchain.pem"
+      notify: reload nginx
+
+    - name: Enable certbot auto-renewal timer
+      ansible.builtin.command: systemctl enable --now certbot.timer
+      changed_when: false

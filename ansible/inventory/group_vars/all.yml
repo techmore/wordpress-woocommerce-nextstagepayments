@@ -1,0 +1,35 @@
+---
+# --- WordPress / site ---------------------------------------------------------
+wp_site_domain: localhost
+wp_site_url: "http://localhost:8080"
+wp_site_title: "NextStage Payments Store"
+wp_root: "/var/www/{{ wp_site_domain }}"
+
+# WordPress admin (CHANGE these before production; consider ansible-vault)
+wp_admin_user: admin
+wp_admin_password: "admin"
+wp_admin_email: admin@example.com
+
+# --- Database ----------------------------------------------------------------
+wp_db_name: wordpress
+wp_db_user: wordpress
+wp_db_password: "wordpress"
+
+# --- Plugins / themes --------------------------------------------------------
+wp_theme: storefront
+# Extra plugins to install/activate (slugs from wordpress.org).
+wp_extra_plugins: []
+#  - slug: contact-form-7
+#  - slug: woocommerce-gateway-stripe
+
+# --- NextStagePayments -------------------------------------------------------
+# Path (on the control machine) to the WooCommerce gateway plugin we ship.
+nsp_plugin_src: "{{ playbook_dir }}/../../plugins/nextstagepayments"
+
+# --- System ------------------------------------------------------------------
+enable_ssl: false
+configure_firewall: false
+system_timezone: Etc/UTC
+
+# --- wp-cli ------------------------------------------------------------------
+wp_bin: /usr/local/bin/wp

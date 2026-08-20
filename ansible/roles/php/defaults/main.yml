@@ -1,0 +1,11 @@
+---
+php_extensions:
+  - php-mysql
+  - php-curl
+  - php-gd
+  - php-xml
+  - php-mbstring
+  - php-zip
+  - php-intl
+  - php-bcmath
+  - php-soap
